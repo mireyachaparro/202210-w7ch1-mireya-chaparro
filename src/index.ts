@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-
 dotenv.config();
 import { CustomError } from './interfaces/error';
 
-const port = process.env.PORT || 3300;
+const port = process.env.PORT || 3800;
 const server = http.createServer(app);
 server.on('listening', () => {
   const addr = server.address();
