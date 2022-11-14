@@ -1,0 +1,16 @@
+{
+  "tasks": [
+    {
+      "title": "Pizza on friday",
+      "id": 1
+    },
+    {
+      "title": "No social life",
+      "id": 2
+    },
+    {
+      "title": "React",
+      "id": 3
+    }
+  ]
+}
