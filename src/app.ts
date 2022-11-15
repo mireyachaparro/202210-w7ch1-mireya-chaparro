@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { knownRouter } from './router/known.router';
+import { knownRouter } from './router/known.router.js';
 import { CustomError } from './interfaces/error.js';
 
 export const app = express();
