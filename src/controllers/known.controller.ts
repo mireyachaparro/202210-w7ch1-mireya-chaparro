@@ -1,49 +1,98 @@
-import { Known } from '../interfaces/known';
-import importData from '../data/data.json' assert { type: 'json' };
 import { NextFunction, Request, Response } from 'express';
-import fs from 'fs/promises';
-
-let data: Array<Known> = importData.things;
+import { Data } from '../file/data.js';
+import { HTTPError } from '../interfaces/error.js';
+import { Known } from '../interfaces/known.js';
 
 export class KnownController {
-  getAll(req: Request, resp: Response) {
-    resp.json(data); //el response coge toda la data y se lo da al front ya como string
-    resp.end(); //para terminar
+  constructor(public dataModel: Data<Known>) {}
+  async getAll(req: Request, resp: Response, next: NextFunction) {
+    try {
+      const data = await this.dataModel.getAll();
+      resp.json(data).end();
+    } catch (error) {
+      const httpError = new HTTPError(
+        503,
+        'Service unavailable',
+        (error as Error).message
+      );
+      next(httpError);
+      return;
+    }
   }
+
   get(req: Request, resp: Response) {
     //
   }
 
-  //crear
-  async post(req: Request, resp: Response) {
-    const newThing = {
-      ...req.body,
-      id: data.length,
-    };
-    data.push(newThing);
-    resp.json(newThing);
-    resp.end();
-  }
-
-  //editar
-  patch(req: Request, resp: Response) {
-    const updateThing = {
-      ...data.find((item) => item.id === +req.params.id),
-      ...req.body,
-    };
-    data[data.findIndex((item) => item.id === +req.params.id)] = updateThing;
-    resp.json(updateThing);
-    resp.end();
-  }
-
-  //delete
-  delete(req: Request, resp: Response, next: NextFunction) {
-    if (!data.find((item) => item.id === +req.params.id)) {
-      next(new Error('Not found'));
+  async post(req: Request, resp: Response, next: NextFunction) {
+    if (!req.body.title) {
+      const httpError = new HTTPError(
+        406,
+        'Not Acceptable',
+        'Title not included in the data'
+      );
+      next(httpError);
       return;
     }
-    data = data.filter((item) => item.id !== +req.params.id);
-    resp.json({});
-    resp.end();
+    try {
+      const newThing = await this.dataModel.post(req.body);
+      resp.json(newThing).end();
+    } catch (error) {
+      const httpError = new HTTPError(
+        503,
+        'Service unavailable',
+        (error as Error).message
+      );
+      next(httpError);
+      return;
+    }
+  }
+
+  async patch(req: Request, resp: Response, next: NextFunction) {
+    try {
+      const updateThing = await this.dataModel.patch(+req.params.id, req.body);
+      resp.json(updateThing).end();
+    } catch (error) {
+      if ((error as Error).message === 'Not found id') {
+        const httpError = new HTTPError(
+          404,
+          'Not Found',
+          (error as Error).message
+        );
+        next(httpError);
+        return;
+      }
+      const httpError = new HTTPError(
+        503,
+        'Service unavailable',
+        (error as Error).message
+      );
+      next(httpError);
+      return;
+    }
+  }
+
+  async delete(req: Request, resp: Response, next: NextFunction) {
+    try {
+      await this.dataModel.delete(+req.params.id);
+      resp.json({}).end();
+    } catch (error) {
+      if ((error as Error).message === 'Not found id') {
+        const httpError = new HTTPError(
+          404,
+          'Not Found',
+          (error as Error).message
+        );
+        next(httpError);
+        return;
+      }
+      const httpError = new HTTPError(
+        503,
+        'Service unavailable',
+        (error as Error).message
+      );
+      next(httpError);
+      return;
+    }
   }
 }
