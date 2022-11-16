@@ -13,5 +13,5 @@ export class HTTPError extends Error implements CustomError {
     this.name = 'HTTPError';
   }
 }
-//esto no se que es
+//esto es un ejemplo de como se instancia una clase
 // new HTTPError(500, 'Ups', 'No funciona');
