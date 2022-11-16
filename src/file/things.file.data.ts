@@ -13,7 +13,7 @@ export class KnownFileData implements Data<Known> {
   async getAll(): Promise<Array<Known>> {
     return fs
       .readFile(this.dataFileURL, 'utf-8')
-      .then((data) => JSON.parse(data) as Array<Known>);
+      .then((data) => JSON.parse(data).things as Array<Known>);
   }
 
   async get(id: id): Promise<Known> {
@@ -49,8 +49,7 @@ export class KnownFileData implements Data<Known> {
     const aData = await this.getAll();
     const index = aData.findIndex((item) => item.id === id);
     if (!index) throw new Error('Not found id');
-    aData.filter((item) => item.id !== id);
-    await this.#saveData(aData);
+    await this.#saveData(aData.filter((item) => item.id !== id));
   }
 
   #createID() {
