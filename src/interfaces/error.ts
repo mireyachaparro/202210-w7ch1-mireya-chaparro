@@ -13,5 +13,5 @@ export class HTTPError extends Error implements CustomError {
     this.name = 'HTTPError';
   }
 }
-
-new HTTPError(500, 'Ups', 'No funciona');
+//esto no se que es
+// new HTTPError(500, 'Ups', 'No funciona');
