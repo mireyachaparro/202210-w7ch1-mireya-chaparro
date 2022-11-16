@@ -14,7 +14,7 @@ const corsOptions = {
 };
 
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 //aqui poner el app.use que ha puesto el para arreglar la seguridad de sonar para el cors, para que no este abierto para todo el mundo (creo)
