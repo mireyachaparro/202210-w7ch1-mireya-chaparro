@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { CustomError } from './interfaces/error.js';
+import { coffeeRouter } from './router/coffees.js';
 
 export const app = express();
 app.disable('x-powered-by');

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { CoffeeController } from '../controllers/coffee';
-import { CoffeeRepository } from '../file/coffee.repository';
+import { CoffeeController } from '../controllers/coffee.js';
+import { CoffeeRepository } from '../file/coffee.repository.js';
 
 export const coffeeRouter = Router();
 
