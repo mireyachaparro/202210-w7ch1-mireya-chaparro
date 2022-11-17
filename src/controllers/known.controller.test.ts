@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { KnownFileData } from '../file/things.file.data';
+import { KnownFileData } from '../data/things.file.data';
 import { KnownController } from './known.controller';
 
 describe('Given KnownController', () => {

@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import { CustomError } from './interfaces/error.js';
 import { coffeeRouter } from './router/coffees.js';
+import { bombillaRouter } from './router/bombillas.js';
 
 export const app = express();
 app.disable('x-powered-by');
@@ -21,10 +22,15 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (_req, res) => {
-  res.send('API Express de tareas').end();
+  res
+    .send(
+      'API Express de bombillas. introducir en la url "/bombilla" y en postman "http://localhost:7700/bombilla"'
+    )
+    .end();
 });
 
 app.use('/coffee', coffeeRouter);
+app.use('/bombilla', bombillaRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(

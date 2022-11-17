@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { Data } from '../data/data.js';
-import { Coffee } from '../interfaces/coffee.js';
+import { Bombilla } from '../interfaces/bombilla.js';
 import { HTTPError } from '../interfaces/error.js';
 
-export class CoffeeController {
-  constructor(public repository: Data<Coffee>) {
+export class BombillaController {
+  constructor(public repository: Data<Bombilla>) {
     //
   }
   async getAll(req: Request, resp: Response, next: NextFunction) {
     try {
-      const coffees = await this.repository.getAll();
-      resp.json({ coffees });
+      const bombillas = await this.repository.getAll();
+      resp.json({ bombillas });
     } catch (error) {
       const httpError = new HTTPError(
         503,
@@ -23,8 +23,8 @@ export class CoffeeController {
 
   async get(req: Request, resp: Response, next: NextFunction) {
     try {
-      const coffee = await this.repository.get(req.params.id);
-      resp.json({ coffee });
+      const bombilla = await this.repository.get(req.params.id);
+      resp.json({ bombilla });
     } catch (error) {
       next(this.#createHttpError(error as Error));
     }
@@ -32,8 +32,8 @@ export class CoffeeController {
 
   async post(req: Request, resp: Response, next: NextFunction) {
     try {
-      const coffee = await this.repository.post(req.body);
-      resp.json({ coffee });
+      const bombilla = await this.repository.post(req.body);
+      resp.json({ bombilla });
     } catch (error) {
       const httpError = new HTTPError(
         503,
@@ -46,8 +46,8 @@ export class CoffeeController {
 
   async patch(req: Request, resp: Response, next: NextFunction) {
     try {
-      const coffee = await this.repository.patch(req.params.id, req.body);
-      resp.json({ coffee });
+      const bombilla = await this.repository.patch(req.params.id, req.body);
+      resp.json({ bombilla });
     } catch (error) {
       next(this.#createHttpError(error as Error));
     }
