@@ -1,3 +1,4 @@
+//esto es una prueba que funciona, para que inserte datos en la base de datos
 import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import mongoose, { model, Schema } from 'mongoose';
 dotenv.config({ path: '../../.env' });

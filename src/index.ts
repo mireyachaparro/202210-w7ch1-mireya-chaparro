@@ -1,7 +1,7 @@
 import http from 'http';
 import { app } from './app.js';
-import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-dotenv.config();
+import { dbConnect } from './db.connect.js';
+
 import { CustomError } from './interfaces/error';
 
 const port = process.env.PORT || 3300;
@@ -22,10 +22,12 @@ server.on('listening', () => {
 });
 
 server.on('error', (error: CustomError, response: http.ServerResponse) => {
-  response.statusCode = error.statusCode;
-  response.statusMessage = error.statusMessage;
+  response.statusCode = error?.statusCode;
+  response.statusMessage = error?.statusMessage;
   response.write(error.message);
   response.end();
 });
 
-server.listen(port);
+dbConnect()
+  .then(() => server.listen(port))
+  .catch((error) => server.emit(error));
