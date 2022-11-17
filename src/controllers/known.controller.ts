@@ -8,7 +8,7 @@ export class KnownController {
   async getAll(req: Request, resp: Response, next: NextFunction) {
     try {
       const data = await this.dataModel.getAll();
-      resp.json(data).end();
+      resp.json(data);
     } catch (error) {
       const httpError = new HTTPError(
         503,
@@ -20,8 +20,14 @@ export class KnownController {
     }
   }
 
-  get(req: Request, resp: Response) {
-    //
+  async get(req: Request, resp: Response, next: NextFunction) {
+    try {
+      const data = await this.dataModel.get(+req.params.id);
+      resp.json(data);
+    } catch (error) {
+      next(this.#createHttpError(error as Error));
+      return;
+    }
   }
 
   async post(req: Request, resp: Response, next: NextFunction) {
@@ -53,21 +59,7 @@ export class KnownController {
       const updateThing = await this.dataModel.patch(+req.params.id, req.body);
       resp.json(updateThing).end();
     } catch (error) {
-      if ((error as Error).message === 'Not found id') {
-        const httpError = new HTTPError(
-          404,
-          'Not Found',
-          (error as Error).message
-        );
-        next(httpError);
-        return;
-      }
-      const httpError = new HTTPError(
-        503,
-        'Service unavailable',
-        (error as Error).message
-      );
-      next(httpError);
+      next(this.#createHttpError(error as Error));
       return;
     }
   }
@@ -77,22 +69,25 @@ export class KnownController {
       await this.dataModel.delete(+req.params.id);
       resp.json({}).end();
     } catch (error) {
-      if ((error as Error).message === 'Not found id') {
-        const httpError = new HTTPError(
-          404,
-          'Not Found',
-          (error as Error).message
-        );
-        next(httpError);
-        return;
-      }
-      const httpError = new HTTPError(
-        503,
-        'Service unavailable',
-        (error as Error).message
-      );
-      next(httpError);
+      next(this.#createHttpError(error as Error));
       return;
     }
+  }
+
+  #createHttpError(error: Error) {
+    if ((error as Error).message === 'Not found id') {
+      const httpError = new HTTPError(
+        404,
+        'Not Found',
+        (error as Error).message
+      );
+      return httpError;
+    }
+    const httpError = new HTTPError(
+      503,
+      'Service unavailable',
+      (error as Error).message
+    );
+    return httpError;
   }
 }
