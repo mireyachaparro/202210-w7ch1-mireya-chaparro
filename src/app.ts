@@ -1,34 +1,30 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { knownRouter } from './router/known.router.js';
 import { CustomError } from './interfaces/error.js';
+import { coffeeRouter } from './router/coffees.js';
 
 export const app = express();
-
-//aqui poner el disable para arreglar la seguridad de sonar para que no todo el mundo sepa quue utilizamos express
 app.disable('x-powered-by');
 
 const corsOptions = {
   origin: '*',
 };
-
 app.use(morgan('dev'));
 app.use(cors(corsOptions));
 app.use(express.json());
 
-//aqui poner el app.use que ha puesto el para arreglar la seguridad de sonar para el cors, para que no este abierto para todo el mundo (creo)
 app.use((req, res, next) => {
-  const origin = req.header('Origin');
+  const origin = req.header('Origin') || '*';
   res.setHeader('Access-Control-Allow-Origin', origin as string);
   next();
 });
 
 app.get('/', (_req, res) => {
-  res.send('API Express de cosas que se').end();
+  res.send('API Express de tareas').end();
 });
 
-app.use('/things', knownRouter);
+app.use('/coffee', coffeeRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(
