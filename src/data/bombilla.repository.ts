@@ -9,9 +9,8 @@ export class BombillaRepository implements Data<Bombilla> {
       required: true,
       unique: true,
     },
-    color: String,
-    taste: String,
-    isExtra: Boolean,
+    power: Number,
+    isLed: Boolean,
   });
   #Model = model('Bombilla', this.#schema, 'bombillas');
 
