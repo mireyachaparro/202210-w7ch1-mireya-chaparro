@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { BombillaController } from '../controllers/bombilla.js';
-import { BombillaRepository } from '../data/bombillas.repository.js';
+import { BombillaRepository } from '../data/bombilla.repository.js';
 
 export const bombillaRouter = Router();
 
